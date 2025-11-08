@@ -1,13 +1,11 @@
 "use client";
-import { useEffect } from "react";
-import { fetchProjects } from "@/lib/api/projects";
+import { useContext, useEffect } from "react";
+import { ProjectsContext } from "@/context/projects-context";
 
 export const ProjectCard = () => {
-  useEffect(() => {
-    fetchProjects()
-      .then((data) => console.log("Projects:", data))
-      .catch((e) => console.error(e));
-  }, []);
+  const { projects } = useContext(ProjectsContext) as { projects: any[] };
 
-  return <div className="bg-red text-zinc-600">ProjectCArd</div>;
+  // console.log(projects);
+
+  return <div className="bg-red text-zinc-600">ProjectCard</div>;
 };
