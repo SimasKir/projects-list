@@ -46,8 +46,17 @@ export type ProjectsContextType = {
   projects: ProjectCardResponse[];
   setProjects: React.Dispatch<React.SetStateAction<ProjectCardResponse[]>>;
   maxItems?: number;
+  level: PaginationLevelType;
+  setLevel: React.Dispatch<React.SetStateAction<PaginationLevelType>>;
 };
 
 export type ProjectsProviderProps = {
   children: ReactNode;
 };
+
+export type PaginationLevelType = 1 | 2 | 3 | 4 | 5;
+
+export type ApiMeta = {
+  total?: number;
+  [key: string]: any;
+}

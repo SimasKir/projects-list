@@ -40,11 +40,11 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
     );
   };
 
-  if (["AA+", "AA"].includes(initial_rating)) {
+  if (["AA+", "AAA", "AA"].includes(initial_rating)) {
     ratingStyle = " bg-[var(--profitus-color-24)]";
   } else if (["AA-", "A", "A+"].includes(initial_rating)) {
     ratingStyle = " bg-[var(--profitus-color-25)]";
-  } else if (["A-", "BBB+"].includes(initial_rating)) {
+  } else if (["A-", "BBB+", "BBB", "BBB-"].includes(initial_rating)) {
     ratingStyle = " bg-[var(--profitus-color-26)]";
   }
 
