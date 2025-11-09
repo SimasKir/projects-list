@@ -5,12 +5,50 @@
   --foreground: #171717;
 }
 
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 12px;
+  }
+
+  @media (min-width: 576px) {
+    .container { max-width: 540px; }
+  }
+  @media (min-width: 768px) {
+    .container { max-width: 720px; }
+  }
+  @media (min-width: 992px) {
+    .container { max-width: 960px; }
+  }
+  @media (min-width: 1200px) {
+    .container { max-width: 1140px; }
+  }
+  @media (min-width: 1400px) {
+    .container { max-width: 1320px; }
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --profitus-color-1: #ffffff;
+  --profitus-color-2: #c4007a;
+  --profitus-color-24: #01c444;
+  --profitus-color-25: #bbe038;
+  --profitus-color-26: #edd21f;
+
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
 }
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {
