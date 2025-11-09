@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type ProjectCardResponse = {
   status: ProjectStatusEnum;
   basic_interest: number;
@@ -39,3 +41,13 @@ enum LoanRatioEnum {
   LTV = 'LTV',
   LTC = 'LTC',
 }
+
+export type ProjectsContextType = {
+  projects: ProjectCardResponse[];
+  setProjects: React.Dispatch<React.SetStateAction<ProjectCardResponse[]>>;
+  maxItems?: number;
+};
+
+export type ProjectsProviderProps = {
+  children: ReactNode;
+};

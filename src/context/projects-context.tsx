@@ -1,26 +1,31 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useState, ReactNode } from "react";
 import { useEffect } from "react";
-import { fetchProjects } from "@/lib/api/projects";
+import { fetchProjects } from "@/lib/projects";
+import {
+  ProjectCardResponse,
+  ProjectsContextType,
+  ProjectsProviderProps,
+} from "@/types/types";
 
-export const ProjectsContext = createContext({});
+export const ProjectsContext = createContext<ProjectsContextType>({
+  projects: [],
+  setProjects: () => {},
+});
 
-export const ProjectsProvider = ({ children }: any) => {
-  const [data, setData] = useState([]);
-  const [projects, setProjects] = useState([]);
+export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
+  const [projects, setProjects] = useState<ProjectCardResponse[]>([]);
+  const [maxItems, setMaxItems] = useState<number>();
 
   useEffect(() => {
     fetchProjects()
-      .then((data) => {
-        setData(data);
-        setProjects(data.data);
+      .then(({ data, meta }) => {
+        setProjects(data);
+        setMaxItems((prev) => prev ?? meta.total);
       })
       .catch((e) => console.error(e));
   }, []);
-
-  //   console.log("data: ", data);
-  //   console.log("projects: ", projects);
 
   return (
     <ProjectsContext.Provider
