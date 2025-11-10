@@ -1,10 +1,12 @@
 "use client";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import type {
   CountryType,
   RatingType,
   PurposeType,
   FiltersType,
+  MultiSelectKeys,
+  MultiSelectValue,
 } from "@/types/types";
 import { DEFAULT_FILTERS, ProjectsContext } from "@/context/projects-context";
 import { Accordion } from "@/components";
@@ -31,47 +33,39 @@ const PURPOSES: PurposeType[] = [
 ];
 
 export const Filter = () => {
-  const { filters, setFilters, setAppliedFilters, setLevel, appliedFilters } =
-    useContext(ProjectsContext);
+  const { setFilters, setHaveFilters, setLevel } = useContext(ProjectsContext);
 
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState<FiltersType>(
-    appliedFilters ?? DEFAULT_FILTERS
-  );
+  const [filtersValues, setFiltersValues] =
+    useState<FiltersType>(DEFAULT_FILTERS);
 
-  useEffect(() => {
-    setDraft(appliedFilters ?? DEFAULT_FILTERS);
-  }, [appliedFilters]);
+  const addMultiSelect = (key: MultiSelectKeys, value: MultiSelectValue) => {
+    setFiltersValues((prev) => {
+      const current = (prev[key] ?? []) as MultiSelectValue[];
+      const next = current.includes(value)
+        ? current.filter((v) => v !== value)
+        : [...current, value];
 
-  const toggleMulti = <T extends string>(
-    key: "country" | "initial_rating",
-    val: T
-  ) => {
-    const list = new Set([...((draft[key] as T[] | undefined) ?? [])]);
-    list.has(val) ? list.delete(val) : list.add(val);
-    setDraft({ ...draft, [key]: Array.from(list) });
+      return { ...prev, [key]: next } as FiltersType;
+    });
   };
 
-  const filtersChanged = useMemo(() => {
-    return JSON.stringify(draft) !== JSON.stringify(appliedFilters);
-  }, [draft, appliedFilters]);
-
   const applyFilters = useCallback(() => {
-    if (!filtersChanged) return;
-    setAppliedFilters(draft);
-    setFilters(draft);
+    setFilters(filtersValues);
 
-    const isCleared = JSON.stringify(draft) === JSON.stringify(DEFAULT_FILTERS);
+    const isCleared =
+      JSON.stringify(filtersValues) === JSON.stringify(DEFAULT_FILTERS);
 
+    setHaveFilters(isCleared ? false : true);
     setLevel(isCleared ? 1 : 5);
-  }, [filtersChanged, draft, setAppliedFilters, setFilters, setLevel]);
+  }, [filtersValues]);
 
   const clearFilters = useCallback(() => {
-    setDraft(DEFAULT_FILTERS);
-    setAppliedFilters(DEFAULT_FILTERS);
     setFilters(DEFAULT_FILTERS);
+    setFiltersValues(DEFAULT_FILTERS);
+    setHaveFilters(false);
     setLevel(1);
-  }, [setAppliedFilters, setFilters, setLevel]);
+  }, [filtersValues]);
 
   return (
     <div className="w-1/2 relative">
@@ -118,19 +112,19 @@ export const Filter = () => {
           <div className="flex flex-col gap-3">
             <Accordion title="Šalis">
               <fieldset className="flex flex-col gap-2">
-                {COUNTRIES.map((c) => (
+                {COUNTRIES.map((country) => (
                   <label
-                    key={c}
+                    key={country}
                     className="flex items-center gap-1 text-sm text-[#736c93]"
                   >
                     <input
                       type="checkbox"
-                      checked={draft.country?.includes(c) ?? false}
-                      onChange={() => toggleMulti("country", c)}
+                      checked={filtersValues.country.includes(country) ?? false}
+                      onChange={() => addMultiSelect("country", country)}
                       className="appearance-none w-4 h-4 border rounded border-[#736c93] checked:bg-white cursor-pointer transition-colors duration-200 relative"
                       style={{
                         backgroundImage:
-                          draft.country?.includes(c) ?? false
+                          filtersValues.country.includes(country) ?? false
                             ? 'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="%23c4007a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5,9 6.5,12 12.5,4" /></svg>\')'
                             : "none",
                         backgroundRepeat: "no-repeat",
@@ -138,7 +132,7 @@ export const Filter = () => {
                         backgroundSize: "12px",
                       }}
                     />
-                    {c.toUpperCase()}
+                    {country.toUpperCase()}
                   </label>
                 ))}
               </fieldset>
@@ -146,19 +140,21 @@ export const Filter = () => {
 
             <Accordion title="Klasė">
               <fieldset className="flex flex-col gap-2 pr-1">
-                {RATINGS.map((r) => (
+                {RATINGS.map((rating) => (
                   <label
-                    key={r}
+                    key={rating}
                     className="flex items-center gap-2 text-sm text-[#736c93]"
                   >
                     <input
                       type="checkbox"
-                      checked={draft.initial_rating?.includes(r) ?? false}
-                      onChange={() => toggleMulti("initial_rating", r)}
+                      checked={
+                        filtersValues.initial_rating.includes(rating) ?? false
+                      }
+                      onChange={() => addMultiSelect("initial_rating", rating)}
                       className="appearance-none w-4 h-4 border rounded border-[#736c93] checked:bg-white cursor-pointer transition-colors duration-200 relative"
                       style={{
                         backgroundImage:
-                          draft.initial_rating?.includes(r) ?? false
+                          filtersValues.initial_rating.includes(rating) ?? false
                             ? 'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="%23c4007a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5,9 6.5,12 12.5,4" /></svg>\')'
                             : "none",
                         backgroundRepeat: "no-repeat",
@@ -166,7 +162,7 @@ export const Filter = () => {
                         backgroundSize: "12px",
                       }}
                     />
-                    {r}
+                    {rating}
                   </label>
                 ))}
               </fieldset>
@@ -174,27 +170,21 @@ export const Filter = () => {
 
             <Accordion title="Paskirtis">
               <fieldset className="flex flex-col gap-2">
-                {PURPOSES.map((p) => (
+                {PURPOSES.map((purpose) => (
                   <label
-                    key={p}
+                    key={purpose}
                     className="flex items-center gap-2 text-sm text-[#736c93]"
                   >
                     <input
                       type="checkbox"
-                      checked={draft.purpose === p}
-                      onChange={() =>
-                        setDraft({
-                          ...draft,
-                          purpose:
-                            draft.purpose === p
-                              ? ("" as PurposeType)
-                              : (p as PurposeType),
-                        })
+                      checked={
+                        filtersValues.purpose?.includes(purpose) ?? false
                       }
+                      onChange={() => addMultiSelect("purpose", purpose)}
                       className="appearance-none w-4 h-4 border rounded border-[#736c93] checked:bg-white cursor-pointer transition-colors duration-200 relative"
                       style={{
                         backgroundImage:
-                          draft.purpose === p
+                          filtersValues.purpose?.includes(purpose) ?? false
                             ? 'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="%23c4007a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5,9 6.5,12 12.5,4" /></svg>\')'
                             : "none",
                         backgroundRepeat: "no-repeat",
@@ -202,7 +192,7 @@ export const Filter = () => {
                         backgroundSize: "12px",
                       }}
                     />
-                    {p
+                    {purpose
                       .replaceAll("_", " ")
                       .replace(/\b\w/, (ch) => ch.toUpperCase())}
                   </label>
@@ -215,10 +205,10 @@ export const Filter = () => {
                 <input
                   type="number"
                   placeholder="Nuo (mėn.)"
-                  value={draft.credit_duration_min ?? ""}
+                  value={filtersValues.credit_duration_min ?? ""}
                   onChange={(e) =>
-                    setDraft({
-                      ...draft,
+                    setFiltersValues({
+                      ...filtersValues,
                       credit_duration_min: e.target.value
                         ? Number(e.target.value)
                         : null,
@@ -230,10 +220,10 @@ export const Filter = () => {
                 <input
                   type="number"
                   placeholder="Iki (mėn.)"
-                  value={draft.credit_duration_max ?? ""}
+                  value={filtersValues.credit_duration_max ?? ""}
                   onChange={(e) =>
-                    setDraft({
-                      ...draft,
+                    setFiltersValues({
+                      ...filtersValues,
                       credit_duration_max: e.target.value
                         ? Number(e.target.value)
                         : null,
@@ -248,8 +238,10 @@ export const Filter = () => {
               <input
                 type="text"
                 placeholder="Įveskite ID"
-                value={draft.pid ?? ""}
-                onChange={(e) => setDraft({ ...draft, pid: e.target.value })}
+                value={filtersValues.pid ?? ""}
+                onChange={(e) =>
+                  setFiltersValues({ ...filtersValues, pid: e.target.value })
+                }
                 className="border border-[#736c93] rounded px-2 py-1 w-40 text-sm text-[#736c93] bg-white focus:outline-none focus:ring-2 focus:ring-[#c4007a]/40 transition-all duration-200"
               />
             </Accordion>
@@ -257,7 +249,7 @@ export const Filter = () => {
             <div className="flex flex-row justify-between gap-2 text-[#736c93] font-bold leading-[16px]">
               <button
                 onClick={applyFilters}
-                className="rounded-lg px-4 py-1 text-md text-[#c4007a]"
+                className="rounded-lg px-4 py-1 text-md text-[#c4007a] hover:border-[#c4007a]"
               >
                 Saugoti filtrus
               </button>

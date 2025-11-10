@@ -50,8 +50,8 @@ export type ProjectsContextType = {
   setLevel: React.Dispatch<React.SetStateAction<PaginationLevelType>>;
   filters: FiltersType;
   setFilters: React.Dispatch<React.SetStateAction<FiltersType>>;
-  appliedFilters: FiltersType;
-  setAppliedFilters: React.Dispatch<React.SetStateAction<FiltersType>>;
+  haveFilters: boolean;
+  setHaveFilters: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type ProjectsProviderProps = {
@@ -72,10 +72,14 @@ export type RatingType = "AAA" | "AA+" | "AA" | "AA-" | "A+" | "A" | "A-" | "BBB
 export type PurposeType = "real_estate_development" | "refinancing" | "working_capital" | "real_estate_acquisition" | "other";
 
 export type FiltersType = {
-  country?: CountryType[];
-  initial_rating?: RatingType[];
-  purpose?: PurposeType | "";
-  credit_duration_min?: number | null;
-  credit_duration_max?: number | null;
-  pid?: string | "";
+  country: CountryType[];
+  initial_rating: RatingType[];
+  purpose: PurposeType[];
+  credit_duration_min: number | null;
+  credit_duration_max: number | null;
+  pid: string | "";
 };
+
+export type MultiSelectKeys = 'country' | 'initial_rating' | 'purpose';
+
+export type MultiSelectValue = CountryType | RatingType | PurposeType;

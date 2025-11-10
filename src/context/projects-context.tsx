@@ -14,7 +14,7 @@ import {
 export const DEFAULT_FILTERS: FiltersType = {
   country: [],
   initial_rating: [],
-  purpose: "",
+  purpose: [],
   credit_duration_min: null,
   credit_duration_max: null,
   pid: "",
@@ -28,8 +28,8 @@ export const ProjectsContext = createContext<ProjectsContextType>({
   setLevel: () => {},
   filters: DEFAULT_FILTERS,
   setFilters: () => {},
-  appliedFilters: DEFAULT_FILTERS,
-  setAppliedFilters: () => {},
+  haveFilters: false,
+  setHaveFilters: () => {},
 });
 
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
@@ -37,13 +37,15 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [maxItems, setMaxItems] = useState<number>(0);
   const [level, setLevel] = useState<PaginationLevelType>(1);
   const [filters, setFilters] = useState<FiltersType>(DEFAULT_FILTERS);
-  const [appliedFilters, setAppliedFilters] =
-    useState<FiltersType>(DEFAULT_FILTERS);
+  const [haveFilters, setHaveFilters] = useState<boolean>(false);
+
+  // console.log(filters);
+  // console.log(haveFilters);
 
   const didAddMaxItems = useRef(false);
 
   useEffect(() => {
-    fetchProjects(level, maxItems, appliedFilters)
+    fetchProjects(level, maxItems, filters)
       .then(({ data, meta }) => {
         setProjects(data);
         if (!didAddMaxItems.current && meta?.total != null) {
@@ -52,9 +54,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
         }
       })
       .catch((e) => console.error(e));
-  }, [level, appliedFilters]);
-
-  console.log(projects);
+  }, [level, filters]);
 
   return (
     <ProjectsContext.Provider
@@ -66,8 +66,8 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
         setLevel,
         filters,
         setFilters,
-        appliedFilters,
-        setAppliedFilters,
+        haveFilters,
+        setHaveFilters,
       }}
     >
       {children}
