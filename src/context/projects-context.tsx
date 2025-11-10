@@ -8,7 +8,17 @@ import {
   ProjectsContextType,
   ProjectsProviderProps,
   PaginationLevelType,
+  FiltersType,
 } from "@/types/types";
+
+export const DEFAULT_FILTERS: FiltersType = {
+  country: [],
+  initial_rating: [],
+  purpose: "",
+  credit_duration_min: null,
+  credit_duration_max: null,
+  pid: "",
+};
 
 export const ProjectsContext = createContext<ProjectsContextType>({
   projects: [],
@@ -16,17 +26,24 @@ export const ProjectsContext = createContext<ProjectsContextType>({
   maxItems: 0,
   level: 1,
   setLevel: () => {},
+  filters: DEFAULT_FILTERS,
+  setFilters: () => {},
+  appliedFilters: DEFAULT_FILTERS,
+  setAppliedFilters: () => {},
 });
 
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [projects, setProjects] = useState<ProjectCardResponse[]>([]);
   const [maxItems, setMaxItems] = useState<number>(0);
   const [level, setLevel] = useState<PaginationLevelType>(1);
+  const [filters, setFilters] = useState<FiltersType>(DEFAULT_FILTERS);
+  const [appliedFilters, setAppliedFilters] =
+    useState<FiltersType>(DEFAULT_FILTERS);
 
   const didAddMaxItems = useRef(false);
 
   useEffect(() => {
-    fetchProjects(level, maxItems)
+    fetchProjects(level, maxItems, appliedFilters)
       .then(({ data, meta }) => {
         setProjects(data);
         if (!didAddMaxItems.current && meta?.total != null) {
@@ -35,7 +52,7 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
         }
       })
       .catch((e) => console.error(e));
-  }, [level]);
+  }, [level, appliedFilters]);
 
   console.log(projects);
 
@@ -47,6 +64,10 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
         maxItems,
         level,
         setLevel,
+        filters,
+        setFilters,
+        appliedFilters,
+        setAppliedFilters,
       }}
     >
       {children}

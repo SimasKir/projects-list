@@ -21,8 +21,6 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
     preview_url,
   } = project;
 
-  let ratingStyle = "";
-
   const fundedPercent = required_amount
     ? parseFloat(((invested_amount / required_amount) * 100).toFixed(1))
     : 0;
@@ -39,6 +37,8 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
       </div>
     );
   };
+
+  let ratingStyle = "";
 
   if (["AA+", "AAA", "AA"].includes(initial_rating)) {
     ratingStyle = " bg-[var(--profitus-color-24)]";

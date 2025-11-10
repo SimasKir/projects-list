@@ -2,14 +2,10 @@
 
 import { useContext } from "react";
 import { ProjectsContext } from "@/context/projects-context";
-import { NextButton, ProjectCard, ProjectsHeader } from "@/components";
+import { Filter, NextButton, ProjectCard, ProjectsHeader } from "@/components";
 
 export const ProjectsList = () => {
   const { projects } = useContext(ProjectsContext);
-
-  if (!projects?.length) {
-    return <div>No projects found</div>;
-  }
 
   return (
     <div className="flex flex-col gap-3 container py-20 pb-30">
@@ -17,13 +13,21 @@ export const ProjectsList = () => {
         <h1 className="text-[38px] leading-[42px] font-bold col-span-1">
           Investavimo galimybės užtikrintos nekilnojamuoju turtu
         </h1>
-        <div className="col-span-1"></div>
+        <div className="col-span-1 flex justify-end items-end">
+          <Filter />
+        </div>
       </div>
       <ProjectsHeader />
-      {projects.map((project) => (
-        <ProjectCard project={project} key={project.pid} />
-      ))}
-      <NextButton />
+      {!projects?.length ? (
+        <p>No projects found</p>
+      ) : (
+        <>
+          {projects.map((project) => (
+            <ProjectCard project={project} key={project.pid} />
+          ))}
+          <NextButton />
+        </>
+      )}
     </div>
   );
 };

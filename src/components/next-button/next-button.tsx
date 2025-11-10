@@ -1,8 +1,9 @@
-import { ProjectsContext } from "@/context/projects-context";
+import { DEFAULT_FILTERS, ProjectsContext } from "@/context/projects-context";
 import { PaginationLevelType } from "@/types/types";
 import { useContext } from "react";
 export const NextButton = () => {
-  const { setLevel, level, maxItems } = useContext(ProjectsContext);
+  const { setLevel, level, maxItems, appliedFilters } =
+    useContext(ProjectsContext);
   let projectsNumber = 10;
   let nextNumber = 10;
 
@@ -22,6 +23,11 @@ export const NextButton = () => {
     projectsNumber = 10;
     nextNumber = 10;
   }
+
+  const isFiltered =
+    JSON.stringify(appliedFilters) !== JSON.stringify(DEFAULT_FILTERS);
+
+  if (isFiltered) return null;
 
   return (
     <div className="flex justify-center">
