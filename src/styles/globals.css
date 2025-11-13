@@ -84,3 +84,18 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 150ms ease-out forwards;
+}

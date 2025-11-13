@@ -69,7 +69,7 @@ export const ProjectsList = () => {
       </div>
 
       {hasProjects && (
-        <div className="mt-4 shrink-0">
+        <div className="mt-4">
           <NextButton />
         </div>
       )}
