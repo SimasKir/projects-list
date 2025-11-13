@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ProjectsContext } from "@/context/projects-context";
 import {
   Filter,
@@ -13,6 +13,7 @@ import {
 
 export const ProjectsList = () => {
   const { projects, loading, error } = useContext(ProjectsContext);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const hasProjects = !loading && (projects?.length ?? 0) > 0;
 
@@ -53,10 +54,14 @@ export const ProjectsList = () => {
               projects!.map((project, i) => (
                 <div
                   key={project.pid}
-                  className="opacity-0 translate-y-4 animate-fadeIn mb-2 [animation-fill-mode:forwards]"
+                  onClick={() => setSelectedId(project.pid)}
+                  className={`opacity-0 translate-y-4 animate-fadeIn mb-2 [animation-fill-mode:forwards] cursor-pointer transition-colors duration-200`}
                   style={{ animationDelay: `${i * 150}ms` }}
                 >
-                  <ProjectCard project={project} />
+                  <ProjectCard
+                    project={project}
+                    selected={selectedId === project.pid}
+                  />
                 </div>
               ))}
           </div>

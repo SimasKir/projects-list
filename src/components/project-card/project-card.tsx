@@ -6,7 +6,13 @@ import {
   ProjectStatusEnum,
 } from "@/types/types";
 
-export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
+export const ProjectCard = ({
+  project,
+  selected,
+}: {
+  project: ProjectCardResponse;
+  selected: boolean;
+}) => {
   const {
     pid,
     project_name,
@@ -84,9 +90,9 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
         {preview_url && status === ProjectStatusEnum.FUNDED && (
           <a
             href={preview_url}
-            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2 cursor-pointer"
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-3 cursor-pointer text-xs"
           >
-            Išmokėta
+            Projektas finansuotas
           </a>
         )}
       </div>
@@ -94,11 +100,16 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
   };
 
   return (
-    <div className="bg-[#ebe8ff] text-[#736c93] rounded-xl w-full px-3 py-2 grid items-center gap-2 [grid-template-columns:repeat(25,minmax(0,1fr))] text-sm">
+    <div
+      className={`bg-[#ebe8ff] text-[#736c93] rounded-xl w-full px-3 py-2 grid items-center gap-2 [grid-template-columns:repeat(25,minmax(0,1fr))] text-sm ${
+        selected ? "bg-[var(--profitus-color-1)]" : ""
+      }`}
+    >
       <div className="col-span-3">
         {image_url && (
           <div className="relative">
             {security_measures &&
+              status !== ProjectStatusEnum.FUNDED &&
               security_measures === "first_rank_mortgage" && (
                 <div className="absolute top-0 left-0 p-2">
                   <Image
@@ -111,6 +122,15 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
                   />
                 </div>
               )}
+            {status === ProjectStatusEnum.FUNDED && (
+              <div className="absolute w-full h-full flex justify-center items-center">
+                <div className="absolute w-full h-full bg-[#4f70ce] opacity-70 z-0"></div>
+
+                <p className="relative z-1 text-[var(--profitus-color-1)] text-lg font-bold text-center">
+                  Projektas finansuotas
+                </p>
+              </div>
+            )}
             <Image
               src={image_url}
               alt={`Profitus investment project ${pid}`}
@@ -146,7 +166,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
             (maks. {loan_ratio_max}%)
           </p>
         ) : (
-          <p>-</p>
+          <p>~{loan_ratio_external}%</p>
         )}
       </div>
 
