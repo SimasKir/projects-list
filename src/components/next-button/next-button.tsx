@@ -29,9 +29,11 @@ export const NextButton = () => {
   return (
     <div className="flex justify-center fixed bottom-0 w-full left-[50%] translate-x-[-50%] bg-linear-to-r from-[#676ece] to-[#c7a2da] animate-slideUp">
       <div className="flex items-center justify-center gap-3 p-4 rounded-lg">
-        <p className="font-bold">Showing {projectsNumber} projects</p>
+        <p className="text-[var(--profitus-color-1)] font-bold">
+          Showing {projectsNumber} projects
+        </p>
         <button
-          className="bg-[var(--profitus-color-2)] text-white font-bold py-2 px-4 rounded-full hover:bg-[var(--profitus-color-3)] cursor-pointer transition-colors duration-200"
+          className="bg-[var(--profitus-color-2)] text-[var(--profitus-color-1)] font-bold py-2 px-4 rounded-full hover:bg-[var(--profitus-color-3)] cursor-pointer transition-colors duration-200"
           onClick={() =>
             setLevel((level > 5 ? 1 : level + 1) as PaginationLevelType)
           }

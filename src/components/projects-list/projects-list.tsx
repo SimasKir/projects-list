@@ -20,7 +20,7 @@ export const ProjectsList = () => {
   return (
     <div className="h-screen flex flex-col container pt-5 xl:pt-20 pb-20">
       <div className="grid mb-7 w-full grid-cols-1 xl:grid-cols-2">
-        <h1 className="text-[24px] leading-[30px] xl:text-[38px] xl:leading-[42px] font-bold col-span-1 text-center xl:text-left mb-7 xl:mb-0">
+        <h1 className="text-[24px] leading-[30px] xl:text-[38px] xl:leading-[42px] font-bold col-span-1 text-center xl:text-left mb-7 xl:mb-0 text-[var(--profitus-color-1)]">
           Investavimo galimybės užtikrintos nekilnojamuoju turtu
         </h1>
         <div className="col-span-1 flex justify-between xl:justify-center items-end gap-3 ml-0 xl:ml-5">
