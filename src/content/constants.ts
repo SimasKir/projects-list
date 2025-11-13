@@ -1,4 +1,11 @@
-import { CountryType, FiltersType, PurposeType, RatingType, SortKeyType, SortType } from "@/types/types";
+import {
+  CountryType,
+  FiltersType,
+  PurposeType,
+  RatingType,
+  SortKeyType,
+  SortType,
+} from "@/types/types";
 
 //filters default values
 export const DEFAULT_FILTERS: FiltersType = {

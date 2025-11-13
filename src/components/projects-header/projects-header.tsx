@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import { ProjectCardResponse } from "@/types/types";
 
 export const ProjectsHeader = () => {
   return (
