@@ -36,6 +36,7 @@
   --font-mono: var(--font-geist-mono);
   --profitus-color-1: #ffffff;
   --profitus-color-2: #c4007a;
+  --profitus-color-7: #bfbbe0;
   --profitus-color-18: #8984c5;
   --profitus-color-24: #01c444;
   --profitus-color-25: #bbe038;
@@ -62,4 +63,13 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out forwards;
 }

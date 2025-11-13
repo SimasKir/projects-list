@@ -1,9 +1,17 @@
-import { ApiMeta, PaginationLevelType, ProjectCardResponse, FiltersType } from "@/types/types";
+import { ApiMeta, PaginationLevelType, ProjectCardResponse, FiltersType, SortType } from "@/types/types";
 import { getLimit } from "./get-limit";
 import { appendJsonArrayParam } from "./query-helpers";
 
-const toQuery = (filters?: FiltersType) => {
+const toQuery = (filters?: FiltersType, sort?: SortType[]) => {
   const p = new URLSearchParams();
+
+  if (sort?.length) {
+    const active = sort
+      .filter((s) => s.dir !== "none")
+      .map((s) => ({ id: s.key, desc: s.dir === "desc" }))
+
+    appendJsonArrayParam(p, "sort[]", active);
+  }
 
   if (filters?.country?.length) {
     appendJsonArrayParam(p, "filters[]", [
@@ -38,22 +46,23 @@ export async function fetchProjects(
   level: PaginationLevelType,
   maxItems: number,
   filters?: FiltersType,
+  sort?: SortType[],
 ) {
   const API = process.env.NEXT_PUBLIC_API_URL!;
   const perPage = 50;
   const all: ProjectCardResponse[] = [];
   let meta: ApiMeta | null = null;
-
+  
   const limit = getLimit(level, maxItems);
   const pagesNeeded = Math.ceil(limit / perPage);
-
-  const baseParams = toQuery(filters);
+  const queryParams = toQuery(filters, sort);
 
   for (let page = 1; page <= pagesNeeded; page++) {
-    const params = new URLSearchParams(baseParams);
+    const params = new URLSearchParams();
     params.set("page", String(page));
     params.set("limit", String(perPage));
-
+    for (const [key, value] of queryParams.entries()) params.append(key, value);
+  
     const url = `${API}?${params.toString()}`;
     console.log("Fetching:", url);
 

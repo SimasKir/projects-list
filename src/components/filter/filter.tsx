@@ -1,36 +1,26 @@
 "use client";
-import { useCallback, useContext, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type {
-  CountryType,
-  RatingType,
-  PurposeType,
   FiltersType,
   MultiSelectKeys,
   MultiSelectValue,
 } from "@/types/types";
-import { DEFAULT_FILTERS, ProjectsContext } from "@/context/projects-context";
+import { ProjectsContext } from "@/context/projects-context";
 import { Accordion } from "@/components";
-
-const COUNTRIES: CountryType[] = ["lt", "ee", "es", "lv"];
-const RATINGS: RatingType[] = [
-  "AAA",
-  "AA+",
-  "AA",
-  "AA-",
-  "A+",
-  "A",
-  "A-",
-  "BBB+",
-  "BBB",
-  "BBB-",
-];
-const PURPOSES: PurposeType[] = [
-  "real_estate_development",
-  "refinancing",
-  "working_capital",
-  "real_estate_acquisition",
-  "other",
-];
+import {
+  COUNTRIES,
+  DEFAULT_FILTERS,
+  PURPOSES,
+  RATINGS,
+} from "../../content/constants";
+import { dropdownClose } from "@/lib/dropdown-close";
 
 export const Filter = () => {
   const { setFilters, setHaveFilters, setLevel } = useContext(ProjectsContext);
@@ -38,6 +28,13 @@ export const Filter = () => {
   const [open, setOpen] = useState(false);
   const [filtersValues, setFiltersValues] =
     useState<FiltersType>(DEFAULT_FILTERS);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    return dropdownClose(ref.current, () => setOpen(false));
+  }, [open]);
 
   const addMultiSelect = (key: MultiSelectKeys, value: MultiSelectValue) => {
     setFiltersValues((prev) => {
@@ -49,6 +46,11 @@ export const Filter = () => {
       return { ...prev, [key]: next } as FiltersType;
     });
   };
+
+  const changed = useMemo(
+    () => JSON.stringify(filtersValues) !== JSON.stringify(DEFAULT_FILTERS),
+    [filtersValues]
+  );
 
   const applyFilters = useCallback(() => {
     setFilters(filtersValues);
@@ -64,11 +66,10 @@ export const Filter = () => {
     setFilters(DEFAULT_FILTERS);
     setFiltersValues(DEFAULT_FILTERS);
     setHaveFilters(false);
-    setLevel(1);
   }, [filtersValues]);
 
   return (
-    <div className="w-1/2 relative">
+    <div ref={ref} className="w-1/2 relative">
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -249,7 +250,10 @@ export const Filter = () => {
             <div className="flex flex-row justify-between gap-2 text-[#736c93] font-bold leading-[16px]">
               <button
                 onClick={applyFilters}
-                className="rounded-lg px-4 py-1 text-md text-[#c4007a] hover:border-[#c4007a]"
+                className={`rounded-lg px-4 py-1 text-md ${
+                  changed ? "text-[#c4007a]" : "text-[#736c93]"
+                }`}
+                aria-disabled={!changed}
               >
                 Saugoti filtrus
               </button>

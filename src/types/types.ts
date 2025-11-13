@@ -23,7 +23,7 @@ export type ProjectCardResponse = {
   security_measures: SecurityMeasuresEnum
 }
 
-enum ProjectStatusEnum {
+export enum ProjectStatusEnum {
   COMING_SOON = 'coming_soon',
   OPEN_FOR_INVESTMENTS = 'open_for_investments',
   FUNDED = 'funded',
@@ -32,7 +32,7 @@ enum ProjectStatusEnum {
   FINISHED = 'finished',
 }
 
-enum SecurityMeasuresEnum {
+export enum SecurityMeasuresEnum {
   FIRST_RANK_MORTGAGE = 'first_rank_mortgage',
   SECOND_RANK_MORTGAGE = 'second_rank_mortgage',
 }
@@ -52,13 +52,19 @@ export type ProjectsContextType = {
   setFilters: React.Dispatch<React.SetStateAction<FiltersType>>;
   haveFilters: boolean;
   setHaveFilters: React.Dispatch<React.SetStateAction<boolean>>;
+  sort: SortType[];
+  setSort: React.Dispatch<React.SetStateAction<SortType[]>>;
+  haveSort: boolean;
+  setHaveSort: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type ProjectsProviderProps = {
   children: ReactNode;
 };
 
-export type PaginationLevelType = 1 | 2 | 3 | 4 | 5;
+export type PaginationLevelType = 0 |1 | 2 | 3 | 4 | 5;
 
 export type ApiMeta = {
   total?: number;
@@ -83,3 +89,18 @@ export type FiltersType = {
 export type MultiSelectKeys = 'country' | 'initial_rating' | 'purpose';
 
 export type MultiSelectValue = CountryType | RatingType | PurposeType;
+
+export type SortKeyType = "basic_interest" | "initial_rating" | "credit_duration" | "private_id";
+
+export type SortDirectionType = "asc" | "desc" | "none";
+
+export type SortType = {
+  key: SortKeyType;
+  dir: SortDirectionType;
+}
+
+export type CardButtonProps = {
+  status: ProjectStatusEnum;
+  preview_url?: string | null;
+};
+

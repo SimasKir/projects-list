@@ -1,6 +1,10 @@
 "use client";
 import Image from "next/image";
-import { ProjectCardResponse } from "@/types/types";
+import {
+  CardButtonProps,
+  ProjectCardResponse,
+  ProjectStatusEnum,
+} from "@/types/types";
 
 export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
   const {
@@ -19,6 +23,8 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
     basic_interest,
     max_bonus_interest,
     preview_url,
+    status,
+    security_measures,
   } = project;
 
   const fundedPercent = required_amount
@@ -48,18 +54,73 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
     ratingStyle = " bg-[var(--profitus-color-26)]";
   }
 
+  const CardButton: React.FC<CardButtonProps> = ({ status, preview_url }) => {
+    return (
+      <div className="col-span-3">
+        {preview_url && status === ProjectStatusEnum.OPEN_FOR_INVESTMENTS && (
+          <a
+            href={preview_url}
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-2)] rounded-[60px] block text-center py-2"
+          >
+            Investuokite
+          </a>
+        )}
+        {preview_url && status === ProjectStatusEnum.COMING_SOON && (
+          <a
+            href={preview_url}
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2 pointer-events-none"
+            aria-disabled="true"
+          >
+            Jau netrukus!
+          </a>
+        )}
+        {preview_url && status === ProjectStatusEnum.CONFIRMED && (
+          <a
+            href={preview_url}
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2"
+          >
+            Patvirtinta
+          </a>
+        )}
+        {preview_url && status === ProjectStatusEnum.FUNDED && (
+          <a
+            href={preview_url}
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2"
+          >
+            Išmokėta
+          </a>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="bg-[#ebe8ff] text-[#736c93] rounded-xl w-full px-3 py-2 grid items-center gap-2 [grid-template-columns:repeat(25,minmax(0,1fr))] text-sm">
       <div className="col-span-3">
         {image_url && (
           <div className="relative">
+            {security_measures &&
+              security_measures === "first_rank_mortgage" && (
+                <div className="absolute top-0 left-0 p-2">
+                  <Image
+                    src="first-place.svg"
+                    alt="first place"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    className="w-6 h-6"
+                  />
+                </div>
+              )}
             <Image
               src={image_url}
               alt={`Profitus investment project ${pid}`}
-              width={0}
-              height={0}
+              width={300}
+              height={200}
               sizes="100vw"
               className="w-full h-auto rounded-md object-cover"
+              placeholder="blur"
+              blurDataURL="/blur.png"
             />
           </div>
         )}
@@ -128,20 +189,11 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
             {Math.round(basic_interest)}–{Math.round(max_bonus_interest)}%
           </p>
         ) : (
-          <p>-</p>
+          <p>~{Math.round(basic_interest)}%</p>
         )}
       </div>
 
-      <div className="col-span-3">
-        {preview_url && (
-          <a
-            href={preview_url}
-            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-2)] rounded-[60px] block text-center py-2"
-          >
-            Investuokite
-          </a>
-        )}
-      </div>
+      <CardButton status={status} preview_url={preview_url} />
     </div>
   );
 };

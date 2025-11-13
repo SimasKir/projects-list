@@ -1,8 +1,8 @@
-import { DEFAULT_FILTERS, ProjectsContext } from "@/context/projects-context";
+import { ProjectsContext } from "@/context/projects-context";
 import { PaginationLevelType } from "@/types/types";
 import { useContext } from "react";
 export const NextButton = () => {
-  const { setLevel, level, maxItems, haveFilters } =
+  const { setLevel, level, maxItems, haveFilters, haveSort } =
     useContext(ProjectsContext);
   let projectsNumber = 10;
   let nextNumber = 10;
@@ -24,12 +24,12 @@ export const NextButton = () => {
     nextNumber = 10;
   }
 
-  if (haveFilters === true) return null;
+  if (haveFilters || haveSort) return null;
 
   return (
-    <div className="flex justify-center">
-      <div className="flex items-center justify-center gap-3 bg-[var(--profitus-color-18)] p-4 rounded-lg">
-        <p>Showing {projectsNumber} projects</p>
+    <div className="flex justify-center fixed bottom-0 w-full left-[50%] translate-x-[-50%] bg-linear-to-r from-[#676ece] to-[#c7a2da]">
+      <div className="flex items-center justify-center gap-3 p-4 rounded-lg">
+        <p className="font-bold">Showing {projectsNumber} projects</p>
         <button
           className="bg-[var(--profitus-color-2)] text-white font-bold py-2 px-4 rounded-lg"
           onClick={() =>

@@ -9,16 +9,10 @@ import {
   ProjectsProviderProps,
   PaginationLevelType,
   FiltersType,
+  SortType,
 } from "@/types/types";
-
-export const DEFAULT_FILTERS: FiltersType = {
-  country: [],
-  initial_rating: [],
-  purpose: [],
-  credit_duration_min: null,
-  credit_duration_max: null,
-  pid: "",
-};
+import { DEFAULT_FILTERS, DEFAULT_SORT } from "@/content/constants";
+import { removeDuplicates } from "@/lib/remove-duplicates";
 
 export const ProjectsContext = createContext<ProjectsContextType>({
   projects: [],
@@ -30,31 +24,55 @@ export const ProjectsContext = createContext<ProjectsContextType>({
   setFilters: () => {},
   haveFilters: false,
   setHaveFilters: () => {},
+  sort: DEFAULT_SORT,
+  setSort: () => {},
+  haveSort: false,
+  setHaveSort: () => {},
+  loading: true,
+  setLoading: () => {},
+  error: null,
+  setError: () => {},
 });
 
 export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [projects, setProjects] = useState<ProjectCardResponse[]>([]);
   const [maxItems, setMaxItems] = useState<number>(0);
-  const [level, setLevel] = useState<PaginationLevelType>(1);
+  const [level, setLevel] = useState<PaginationLevelType>(0);
   const [filters, setFilters] = useState<FiltersType>(DEFAULT_FILTERS);
   const [haveFilters, setHaveFilters] = useState<boolean>(false);
+  const [sort, setSort] = useState<SortType[]>(DEFAULT_SORT);
+  const [haveSort, setHaveSort] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // console.log(filters);
-  // console.log(haveFilters);
+  console.log(projects);
+
+  useEffect(() => {
+    setLevel(1);
+  }, []);
 
   const didAddMaxItems = useRef(false);
 
   useEffect(() => {
-    fetchProjects(level, maxItems, filters)
+    setLoading(true);
+    fetchProjects(level, maxItems, filters, sort)
       .then(({ data, meta }) => {
-        setProjects(data);
+        const uniqueData = removeDuplicates(data);
+        setProjects(uniqueData);
         if (!didAddMaxItems.current && meta?.total != null) {
           setMaxItems(meta.total);
           didAddMaxItems.current = true;
         }
       })
-      .catch((e) => console.error(e));
-  }, [level, filters]);
+      .catch((e) => {
+        console.error(e);
+        setError(
+          `Error: ${e.message}` ||
+            "Something went wrong while fetching projects."
+        );
+      })
+      .finally(() => setLoading(false));
+  }, [level, filters, sort]);
 
   return (
     <ProjectsContext.Provider
@@ -68,6 +86,14 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
         setFilters,
         haveFilters,
         setHaveFilters,
+        sort,
+        setSort,
+        haveSort,
+        setHaveSort,
+        loading,
+        setLoading,
+        error,
+        setError,
       }}
     >
       {children}

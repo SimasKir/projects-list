@@ -5,13 +5,11 @@ import { useState } from "react";
 export const Accordion = ({
   title,
   children,
-  defaultOpen = false,
 }: {
   title: string;
   children: React.ReactNode;
-  defaultOpen?: boolean;
 }) => {
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(false);
   const sectionId = `section-${title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")}`;
