@@ -1,4 +1,4 @@
-import { CountryType, FiltersType, PurposeType, RatingType, SortType } from "@/types/types";
+import { CountryType, FiltersType, PurposeType, RatingType, SortKeyType, SortType } from "@/types/types";
 
 //filters default values
 export const DEFAULT_FILTERS: FiltersType = {
@@ -15,6 +15,13 @@ export const DEFAULT_SORT: SortType[] = [
   { key: "basic_interest", dir: "none" },
   { key: "initial_rating", dir: "none" },
   { key: "credit_duration", dir: "none" },
+];
+
+//sort labels
+export const OPTIONS: { key: SortKeyType; label: string }[] = [
+  { key: "basic_interest", label: "Palūkanos" },
+  { key: "initial_rating", label: "Pradinis reitingas" },
+  { key: "credit_duration", label: "Kredito trukmė" },
 ];
 
 //possible countries values

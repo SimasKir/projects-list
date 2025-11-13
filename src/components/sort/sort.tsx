@@ -66,7 +66,7 @@ export const Sort = () => {
     setSort(DEFAULT_SORT);
     setSortValues(DEFAULT_SORT);
     setHaveSort(false);
-    // setLevel(1);
+    setOpen(false);
   }, [sortValues]);
 
   return (
@@ -201,8 +201,10 @@ export const Sort = () => {
             <div className="flex flex-row justify-between gap-2 text-[#736c93] font-bold leading-[16px]">
               <button
                 onClick={applySort}
-                className={`rounded-lg px-4 py-1 text-md ${
-                  changed ? "text-[#c4007a]" : "text-[#736c93]"
+                className={`rounded-lg px-4 py-1 text-md border border-transparent ${
+                  changed
+                    ? "text-[#c4007a] cursor-pointer hover:border-[#c4007a]"
+                    : "text-[#736c93] cursor-not-allowed"
                 }`}
                 aria-disabled={!changed}
               >
@@ -210,7 +212,7 @@ export const Sort = () => {
               </button>
               <button
                 onClick={clearSort}
-                className="rounded-lg px-4 py-1 text-md flex items-center gap-1"
+                className="rounded-lg px-4 py-1 text-md flex items-center gap-1 border border-transparent hover:border-[#c4007a] cursor-pointer"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

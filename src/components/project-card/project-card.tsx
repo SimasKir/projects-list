@@ -60,7 +60,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
         {preview_url && status === ProjectStatusEnum.OPEN_FOR_INVESTMENTS && (
           <a
             href={preview_url}
-            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-2)] rounded-[60px] block text-center py-2"
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-2)] rounded-[60px] block text-center py-2 hover:bg-[var(--profitus-color-3)] cursor-pointer transition-colors duration-200"
           >
             Investuokite
           </a>
@@ -68,8 +68,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
         {preview_url && status === ProjectStatusEnum.COMING_SOON && (
           <a
             href={preview_url}
-            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2 pointer-events-none"
-            aria-disabled="true"
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2 cursor-pointer"
           >
             Jau netrukus!
           </a>
@@ -77,7 +76,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
         {preview_url && status === ProjectStatusEnum.CONFIRMED && (
           <a
             href={preview_url}
-            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2"
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2 cursor-pointer"
           >
             Patvirtinta
           </a>
@@ -85,7 +84,7 @@ export const ProjectCard = ({ project }: { project: ProjectCardResponse }) => {
         {preview_url && status === ProjectStatusEnum.FUNDED && (
           <a
             href={preview_url}
-            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2"
+            className="text-[var(--profitus-color-1)] bg-[var(--profitus-color-7)] rounded-[60px] block text-center py-2 cursor-pointer"
           >
             Išmokėta
           </a>

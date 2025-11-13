@@ -10,6 +10,7 @@
     width: 100%;
     margin-inline: auto;
     padding-inline: 12px;
+    max-width: 100%;
   }
 
   @media (min-width: 576px) {
@@ -35,6 +36,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --profitus-color-1: #ffffff;
+  --profitus-color-3: #8e125f;
   --profitus-color-2: #c4007a;
   --profitus-color-7: #bfbbe0;
   --profitus-color-18: #8984c5;
@@ -72,4 +74,13 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
