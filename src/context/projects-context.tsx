@@ -45,8 +45,6 @@ export const ProjectsProvider = ({ children }: ProjectsProviderProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  console.log(projects);
-
   useEffect(() => {
     setLevel(1);
   }, []);

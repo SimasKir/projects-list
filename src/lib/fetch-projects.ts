@@ -80,7 +80,6 @@ export async function fetchProjects(
     for (const [key, value] of queryParams.entries()) params.append(key, value);
 
     const url = `${API}?${params.toString()}`;
-    console.log("Fetching:", url);
 
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed page ${page}: ${res.status}`);
