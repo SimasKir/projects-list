@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ProjectsList } from "@/components";
 
 export default function Home() {
