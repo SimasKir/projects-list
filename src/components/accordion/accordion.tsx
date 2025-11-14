@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Accordion = ({
   title,
   children,
+  isOpen = false,
+  onToggle = () => {},
 }: {
   title: string;
   children: React.ReactNode;
+  isOpen?: boolean;
+  onToggle?: () => void;
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(isOpen);
+
+  useEffect(() => {
+    setOpen(isOpen);
+  }, [isOpen]);
+
   const sectionId = `section-${title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")}`;
@@ -18,7 +27,7 @@ export const Accordion = ({
     <div className="border-b-2">
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={onToggle}
         aria-expanded={open}
         aria-controls={sectionId}
         className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-[#736c93]"

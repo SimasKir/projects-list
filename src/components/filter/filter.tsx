@@ -28,6 +28,7 @@ export const Filter = () => {
   const [open, setOpen] = useState(false);
   const [filtersValues, setFiltersValues] =
     useState<FiltersType>(DEFAULT_FILTERS);
+  const [activeAccordion, setActiveAccordion] = useState<string | null>(null);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -35,6 +36,10 @@ export const Filter = () => {
     if (!open) return;
     return dropdownClose(ref.current, () => setOpen(false));
   }, [open]);
+
+  const handleAccordionToggle = (name: string) => {
+    setActiveAccordion((prev) => (prev === name ? null : name));
+  };
 
   const addMultiSelect = (key: MultiSelectKeys, value: MultiSelectValue) => {
     setFiltersValues((prev) => {
@@ -109,11 +114,15 @@ export const Filter = () => {
           id="filters-panel"
           role="region"
           aria-label="Filter options"
-          className="mt-3 rounded border p-3 absolute z-10 bg-[var(--profitus-color-1)] w-full"
+          className="mt-3 rounded border p-3 absolute right-0 z-10 bg-[var(--profitus-color-1)] w-[175%] md:w-full"
         >
           <div className="flex flex-col gap-3">
-            <Accordion title="Šalis">
-              <fieldset className="flex flex-col gap-2">
+            <Accordion
+              title="Šalis"
+              isOpen={activeAccordion === "country"}
+              onToggle={() => handleAccordionToggle("country")}
+            >
+              <fieldset className="flex flex-row lg:flex-col flex-wrap gap-2 pr-1">
                 {COUNTRIES.map((country) => (
                   <label
                     key={country}
@@ -140,8 +149,12 @@ export const Filter = () => {
               </fieldset>
             </Accordion>
 
-            <Accordion title="Klasė">
-              <fieldset className="flex flex-col gap-2 pr-1">
+            <Accordion
+              title="Klasė"
+              isOpen={activeAccordion === "rating"}
+              onToggle={() => handleAccordionToggle("rating")}
+            >
+              <fieldset className="flex flex-row lg:flex-col flex-wrap gap-2 pr-1">
                 {RATINGS.map((rating) => (
                   <label
                     key={rating}
@@ -170,7 +183,11 @@ export const Filter = () => {
               </fieldset>
             </Accordion>
 
-            <Accordion title="Paskirtis">
+            <Accordion
+              title="Paskirtis"
+              isOpen={activeAccordion === "purpose"}
+              onToggle={() => handleAccordionToggle("purpose")}
+            >
               <fieldset className="flex flex-col gap-2">
                 {PURPOSES.map((purpose) => (
                   <label
@@ -202,7 +219,11 @@ export const Filter = () => {
               </fieldset>
             </Accordion>
 
-            <Accordion title="Kredito trukmė (mėn.)">
+            <Accordion
+              title="Kredito trukmė (mėn.)"
+              isOpen={activeAccordion === "credit_duration"}
+              onToggle={() => handleAccordionToggle("credit_duration")}
+            >
               <div className="flex items-center gap-3 text-[#736c93]">
                 <input
                   type="number"
@@ -236,7 +257,11 @@ export const Filter = () => {
               </div>
             </Accordion>
 
-            <Accordion title="Identifikacinis numeris">
+            <Accordion
+              title="Identifikacinis numeris"
+              isOpen={activeAccordion === "pid"}
+              onToggle={() => handleAccordionToggle("pid")}
+            >
               <input
                 type="text"
                 placeholder="Įveskite ID"

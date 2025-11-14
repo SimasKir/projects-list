@@ -76,7 +76,7 @@ export const Sort = () => {
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-controls="sort-panel"
-        className="w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm bg-[var(--profitus-color-1)] hover:bg-gray-50 focus:outline-none text-[#736c93]"
+        className="w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm bg-[var(--profitus-color-1)] hover:bg-gray-50 focus:outline-none text-[#736c93]  w-[175%] md:w-full"
       >
         <span className="text-gray-700 flex flex-row items-center gap-2">
           <svg
@@ -109,7 +109,7 @@ export const Sort = () => {
           id="sort-panel"
           role="region"
           aria-label="Sort options"
-          className="mt-3 rounded border p-3 absolute z-10 bg-[var(--profitus-color-1)] w-full"
+          className="mt-3 rounded border p-3 absolute left-0 z-10 bg-[var(--profitus-color-1)] w-[175%] md:w-full"
         >
           <div className="flex flex-col gap-3">
             <fieldset className="flex flex-col gap-2">

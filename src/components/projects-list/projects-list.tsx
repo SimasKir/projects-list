@@ -54,7 +54,11 @@ export const ProjectsList = () => {
               projects!.map((project, i) => (
                 <div
                   key={project.pid}
-                  onClick={() => setSelectedId(project.pid)}
+                  onClick={() =>
+                    setSelectedId((prev) =>
+                      prev === project.pid ? null : project.pid
+                    )
+                  }
                   className={`opacity-0 translate-y-4 animate-fadeIn mb-2 [animation-fill-mode:forwards] cursor-pointer transition-colors duration-200`}
                   style={{ animationDelay: `${i * 150}ms` }}
                 >
